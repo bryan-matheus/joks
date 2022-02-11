@@ -1,48 +1,32 @@
-import type { LinksFunction } from "remix";
-import { Outlet, Link } from "remix";
+import type { LoaderFunction } from "remix";
+import { useLoaderData, Link } from "remix";
+import type { Joke } from "@prisma/client";
 
-import stylesUrl from "~/styles/jokes.css";
+import { db } from "~/utils/db.server";
 
-export const links: LinksFunction = () => {
-  return [{ rel: "stylesheet", href: stylesUrl }];
+type LoaderData = { randomJoke: Joke };
+
+export const loader: LoaderFunction = async () => {
+  const count = await db.joke.count();
+  const randomRowNumber = Math.floor(Math.random() * count);
+  const [randomJoke] = await db.joke.findMany({
+    take: 1,
+    skip: randomRowNumber
+  });
+  const data: LoaderData = { randomJoke };
+  return data;
 };
 
-export default function JokesRoute() {
+export default function JokesIndexRoute() {
+  const data = useLoaderData<LoaderData>();
+
   return (
-    <div className="jokes-layout">
-      <header className="jokes-header">
-        <div className="container">
-          <h1 className="home-link">
-            <Link
-              to="/"
-              title="Remix Jokes"
-              aria-label="Remix Jokes"
-            >
-              <span className="logo">🤪</span>
-              <span className="logo-medium">J🤪KES</span>
-            </Link>
-          </h1>
-        </div>
-      </header>
-      <main className="jokes-main">
-        <div className="container">
-          <div className="jokes-list">
-            <Link to=".">Get a random joke</Link>
-            <p>Here are a few more jokes to check out:</p>
-            <ul>
-              <li>
-                <Link to="some-joke-id">Hippo</Link>
-              </li>
-            </ul>
-            <Link to="new" className="button">
-              Add your own
-            </Link>
-          </div>
-          <div className="jokes-outlet">
-            <Outlet />
-          </div>
-        </div>
-      </main>
+    <div>
+      <p>Here's a random joke:</p>
+      <p>{data.randomJoke.content}</p>
+      <Link to={data.randomJoke.id}>
+        "{data.randomJoke.name}" Permalink
+      </Link>
     </div>
   );
 }
