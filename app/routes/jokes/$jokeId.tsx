@@ -1,4 +1,4 @@
-import type { LoaderFunction } from "remix";
+import { LoaderFunction, useParams } from "remix";
 import { Link, useLoaderData } from "remix";
 import type { Joke } from "@prisma/client";
 
@@ -7,24 +7,31 @@ import { db } from "~/utils/db.server";
 type LoaderData = { joke: Joke };
 
 export const loader: LoaderFunction = async ({
-  params
+    params
 }) => {
-  const joke = await db.joke.findUnique({
-    where: { id: params.jokeId }
-  });
-  if (!joke) throw new Error("Joke not found");
-  const data: LoaderData = { joke };
-  return data;
+    const joke = await db.joke.findUnique({
+        where: { id: params.jokeId }
+    });
+    if (!joke) throw new Error("Joke not found");
+    const data: LoaderData = { joke };
+    return data;
 };
 
 export default function JokeRoute() {
-  const data = useLoaderData<LoaderData>();
+    const data = useLoaderData<LoaderData>();
 
-  return (
-    <div>
-      <p>Here's your hilarious joke:</p>
-      <p>{data.joke.content}</p>
-      <Link to=".">{data.joke.name} Permalink</Link>
-    </div>
-  );
+    return (
+        <div>
+            <p>Here's your hilarious joke:</p>
+            <p>{data.joke.content}</p>
+            <Link to=".">{data.joke.name} Permalink</Link>
+        </div>
+    );
+}
+
+export function ErrorBoundary() {
+    const { jokeId } = useParams();
+    return (
+        <div className="error-container">{`There was an error loading joke by the id ${jokeId}. Sorry.`}</div>
+    );
 }
