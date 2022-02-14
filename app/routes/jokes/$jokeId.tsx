@@ -4,7 +4,6 @@ import type {
     MetaFunction
 } from "remix";
 import {
-    Link,
     useLoaderData,
     useCatch,
     redirect,
