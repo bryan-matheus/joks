@@ -26,12 +26,22 @@ export const meta: MetaFunction = ({
     if (!data) {
         return {
             title: "No joke",
-            description: "No joke found"
+            description: "No joke found",
+            "og:title": "No joke",
+            "og:description": "No joke found",
+            "og:type": "website",
+            "twitter:title": "No joke",
+            "twitter:description": "No joke found"
         };
     }
     return {
         title: `"${data.joke.name}" joke`,
-        description: `Enjoy the "${data.joke.name}" joke and much more`
+        description: `Enjoy the "${data.joke.name}" joke and much more`,
+        "og:title": `"${data.joke.name}" joke`,
+        "og:description": `Enjoy the "${data.joke.name}" joke and much more`,
+        "og:type": "website",
+        "twitter:title": `"${data.joke.name}" joke`,
+        "twitter:description": `Enjoy the "${data.joke.name}" joke and much more`
     };
 };
 
