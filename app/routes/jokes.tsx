@@ -46,12 +46,12 @@ export default function JokesRoute() {
                             aria-label="Remix Jokes"
                         >
                             <span className="logo">🤪</span>
-                            <span className="logo-medium">J🤪KES</span>
+                            <span className="logo-medium">J🤪KS</span>
                         </Link>
                     </h1>
                     {data.user ? (
                         <div className="user-info">
-                            <span>{`Hi ${data.user.username}`}</span>
+                            <span>Hi  <Link to="/profile">{data.user.username}</Link></span>
                             <form action="/logout" method="post">
                                 <button type="submit" className="button">
                                     Logout
