@@ -32,22 +32,22 @@ export const links: LinksFunction = () => {
 };
 
 export const meta: MetaFunction = () => {
-    const description = `Learn Remix and laugh at the same time!`;
+    const description = `Laugh with awesome jokes!`;
     return {
         description,
-        keywords: "Remix,jokes",
+        keywords: "dad,jokes,programmer",
         "twitter:image": "https://joks.fly.dev/social.png",
         "twitter:card": "summary_large_image",
         "twitter:creator": "@remix_run",
         "twitter:site": "@remix_run",
-        "twitter:title": "Remix Jokes",
+        "twitter:title": "Joks",
         "twitter:description": description
     };
 };
 
 function Document({
     children,
-    title = `Remix: So great, it's funny!`
+    title = `So great, it's funny!`
 }: {
     children: React.ReactNode;
     title?: string;
