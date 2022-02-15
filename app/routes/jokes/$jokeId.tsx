@@ -9,7 +9,7 @@ import {
     redirect,
     useParams
 } from "remix";
-import type { Joke } from "@prisma/client";
+import type { Joke, User } from "@prisma/client";
 
 import { db } from "~/utils/db.server";
 import {
@@ -45,7 +45,7 @@ export const meta: MetaFunction = ({
     };
 };
 
-type LoaderData = { joke: Joke; isOwner: boolean };
+type LoaderData = { joke: Joke; isOwner: boolean, owner: User };
 
 export const loader: LoaderFunction = async ({
     request,
@@ -56,15 +56,24 @@ export const loader: LoaderFunction = async ({
     const joke = await db.joke.findUnique({
         where: { id: params.jokeId }
     });
+
+
     if (!joke) {
         throw new Response("What a joke! Not found.", {
             status: 404
         });
     }
+
+    const owner = await db.user.findUnique({
+        where: { id: joke.jokesterId }
+    });
+
     const data: LoaderData = {
         joke,
-        isOwner: userId === joke.jokesterId
+        isOwner: userId === joke.jokesterId,
+        owner: owner as User
     };
+
     return data;
 };
 
@@ -101,7 +110,7 @@ export default function JokeRoute() {
     const data = useLoaderData<LoaderData>();
 
     return (
-        <JokeDisplay joke={data.joke} isOwner={data.isOwner} />
+        <JokeDisplay joke={data.joke} owner={data.owner} isOwner={data.isOwner} />
     );
 }
 
