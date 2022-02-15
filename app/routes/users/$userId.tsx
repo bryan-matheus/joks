@@ -1,14 +1,33 @@
 import { User } from "@prisma/client";
 import { LoaderFunction, MetaFunction, useCatch, useLoaderData, useParams } from "remix";
 import { db } from "~/utils/db.server";
-import { getUserId } from "~/utils/session.server";
 
-export const meta: MetaFunction = () => ({
-    title: "So great, it's funny!",
-    description: "Some dad jokes and more for you!",
-    "og:title": "So great, it's funny!",
-    "og:description": "Some dad jokes and more for you!"
-});
+export const meta: MetaFunction = ({
+    data
+}: {
+    data: LoaderData | undefined;
+}) => {
+    if (!data) {
+        return {
+            title: "No user",
+            description: "No user found",
+            "og:title": "No user",
+            "og:description": "No user found",
+            "og:type": "website",
+            "twitter:title": "No user",
+            "twitter:description": "No user found"
+        };
+    }
+    return {
+        title: `See "${data.user.username}" on Joks app`,
+        description: `Enjoy with the "${data.user.username}" in the Joks app and much more`,
+        "og:title": `See "${data.user.username}" on Joks app`,
+        "og:description": `Enjoy with the "${data.user.username}" in the Joks app and much more`,
+        "og:type": "website",
+        "twitter:title": `See "${data.user.username}" on Joks app`,
+        "twitter:description": `Enjoy with the "${data.user.username}" in the Joks app and much more`
+    };
+};
 
 type LoaderData = { user: User };
 
