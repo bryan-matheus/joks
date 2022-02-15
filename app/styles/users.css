@@ -1,0 +1,43 @@
+.users-header {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding-top: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.users-bio {
+    max-width: 300px;
+}
+
+.users-jokes {
+    padding: 1rem 0;
+}
+
+.users-title {
+    color: var(--color-links);
+}
+
+.users-jokes-title {
+    margin-bottom: 1.2rem;
+}
+
+.users-joke {
+    padding: 1rem;
+    margin: 0.5rem 0;
+    border: 1px solid var(--color-border);
+    border-radius: 5px;
+    transition: all 0.2s ease-in-out;
+    cursor: pointer;
+}
+
+.users-joke-link {
+    color: var(--color-foreground);
+    text-decoration: none !important;
+}
+
+.users-joke:hover {
+    box-shadow: 0 0.2rem 1rem rgba(0, 0, 0, 0.4);
+}
