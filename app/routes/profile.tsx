@@ -37,6 +37,28 @@ export default function ProfileRoute() {
 
     return (
         <div className="profile-layout">
+            <header className="profile-header">
+                <div className="container">
+                    <h1 className="home-link">
+                        <Link
+                            to="/"
+                            title="Joks"
+                            aria-label="Joks"
+                        >
+                            <span className="logo">🤪</span>
+                            <span className="logo-medium">J🤪KS</span>
+                        </Link>
+                    </h1>
+                    <div className="user-info">
+                        <Link to="/jokes">Back to home</Link>
+                        <form action="/logout" method="post">
+                            <button type="submit" className="button">
+                                Logout
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </header>
             <main className="profile-main">
                 <div className="container">
                     <div className="profile-list">

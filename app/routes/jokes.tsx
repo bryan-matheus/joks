@@ -51,7 +51,7 @@ export default function JokesRoute() {
                     </h1>
                     {data.user ? (
                         <div className="user-info">
-                            <span>Hi  <Link to="/profile">{data.user.username}</Link></span>
+                            <span>Hi, <Link to="/profile">{data.user.username}</Link></span>
                             <form action="/logout" method="post">
                                 <button type="submit" className="button">
                                     Logout
