@@ -14,6 +14,7 @@ import {
 import { db } from "~/utils/db.server";
 import { getUserId, requireUserId } from "~/utils/session.server";
 import bcrypt from "bcryptjs";
+import { validateCurrentPassword, validateNewPassword, validateRepeatPassword } from "~/utils/password.helper";
 
 type ActionData = {
     formError?: string;
@@ -41,27 +42,6 @@ export const loader: LoaderFunction = async ({ request }) => {
 
 const badRequest = (data: ActionData) => {
     return json(data, { status: 400 });
-}
-
-function validateCurrentPassword(password: string) {
-    if (password.length < 8) {
-        return `That password is too short`;
-    }
-}
-
-function validateRepeatPassword(password: string, repeatPassword: string) {
-    if (password !== repeatPassword) {
-        return `Passwords do not match`;
-    }
-}
-function validateNewPassword(password: string) {
-    if (password.length < 8) {
-        return `That password is too short`;
-    }
-
-    if (password.length > 255) {
-        return `That password is too long`;
-    }
 }
 
 export const action: ActionFunction = async ({ request }) => {
