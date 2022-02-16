@@ -7,6 +7,8 @@ import {
     redirect,
     useActionData,
     useCatch,
+    useParams,
+    useSearchParams,
     useTransition
 } from "remix";
 import { db } from "~/utils/db.server";
@@ -116,12 +118,13 @@ export const action: ActionFunction = async ({ request }) => {
         });
     }
 
-    return redirect("/profile");
+    return redirect("/profile/change-password?success=true");
 };
 
 export default function ProfileEditRoute() {
     const actionData = useActionData<ActionData>();
     const transition = useTransition();
+    const [searchParams,] = useSearchParams();
 
     return (
         <div>
@@ -215,6 +218,9 @@ export default function ProfileEditRoute() {
                     {transition.state === "submitting" ? "Changing your password..." : "Change password"}
                 </button>
             </Form>
+            {searchParams.get("success") ? (
+                <p className="form-validation-success success-container">Password changed successfully!</p>
+            ) : null}
         </div>
     );
 }
