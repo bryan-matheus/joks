@@ -2,6 +2,8 @@
 # For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
 
 name: Joks Workflow
+env:
+  FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
 
 on:
   push:
@@ -30,11 +32,12 @@ jobs:
     - run: npm run build --if-present
   
   deploy:
-    needs: build
-    
-    runs-on: ubuntu-latest
+      name: Deploy app
 
-    steps:
-    - name: 'Deploy to Fly.io'
-      uses: superfly/flyctl-actions@1.1
-    - run: fly deploy
+      runs-on: ubuntu-latest
+
+      steps:
+      - uses: actions/checkout@v2
+      - uses: superfly/flyctl-actions@1.3
+        with:
+          args: "deploy"
