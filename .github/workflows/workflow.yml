@@ -38,7 +38,7 @@ jobs:
 
   deploy:
     name: Deploy Joks app
-    needs: build 
+    needs: build_and_lint 
 
     runs-on: ubuntu-latest
 
