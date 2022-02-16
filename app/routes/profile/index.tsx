@@ -1,5 +1,5 @@
-import { LoaderFunction, redirect } from "remix"
+import { LoaderFunction, redirect } from 'remix';
 
 export const loader: LoaderFunction = async () => {
-    return redirect("/profile/edit");
+  return redirect('/profile/edit');
 };

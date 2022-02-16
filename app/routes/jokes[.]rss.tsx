@@ -1,38 +1,20 @@
-import type { LoaderFunction } from "remix";
+import type { LoaderFunction } from 'remix';
+import { db } from '~/utils/db.server';
+import { escapeCdata, escapeHtml } from '~/utils/html.helper';
 
-import { db } from "~/utils/db.server";
-
-function escapeCdata(s: string) {
-  return s.replace(/\]\]>/g, "]]]]><![CDATA[>");
-}
-
-function escapeHtml(s: string) {
-  return s
-    .replace(/\&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
-}
-
-export const loader: LoaderFunction = async ({
-  request
-}) => {
+export const loader: LoaderFunction = async ({ request }) => {
   const jokes = await db.joke.findMany({
     take: 100,
-    orderBy: { createdAt: "desc" },
+    orderBy: { createdAt: 'desc' },
     include: { jokester: { select: { username: true } } }
   });
 
   const host =
-    request.headers.get("X-Forwarded-Host") ??
-    request.headers.get("host");
+    request.headers.get('X-Forwarded-Host') ?? request.headers.get('host');
   if (!host) {
-    throw new Error("Could not determine domain URL.");
+    throw new Error('Could not determine domain URL.');
   }
-  const protocol = host.includes("localhost")
-    ? "http"
-    : "https";
+  const protocol = host.includes('localhost') ? 'http' : 'https';
   const domain = `${protocol}://${host}`;
   const jokesUrl = `${domain}/jokes`;
 
@@ -46,12 +28,10 @@ export const loader: LoaderFunction = async ({
         <generator>Kody the Koala</generator>
         <ttl>40</ttl>
         ${jokes
-          .map(joke =>
+          .map((joke) =>
             `
             <item>
-              <title><![CDATA[${escapeCdata(
-                joke.name
-              )}]]></title>
+              <title><![CDATA[${escapeCdata(joke.name)}]]></title>
               <description><![CDATA[A funny joke called ${escapeHtml(
                 joke.name
               )}]]></description>
@@ -64,18 +44,16 @@ export const loader: LoaderFunction = async ({
             </item>
           `.trim()
           )
-          .join("\n")}
+          .join('\n')}
       </channel>
     </rss>
   `.trim();
 
   return new Response(rssString, {
     headers: {
-      "Cache-Control": `public, max-age=${
-        60 * 10
-      }, s-maxage=${60 * 60 * 24}`,
-      "Content-Type": "application/xml",
-      "Content-Length": String(Buffer.byteLength(rssString))
+      'Cache-Control': `public, max-age=${60 * 10}, s-maxage=${60 * 60 * 24}`,
+      'Content-Type': 'application/xml',
+      'Content-Length': String(Buffer.byteLength(rssString))
     }
   });
 };
